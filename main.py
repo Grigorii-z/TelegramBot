@@ -2,6 +2,7 @@
 
 import telebot  # pyTelegramBotAPI	4.3.1
 from telebot import types
+from random import *
 
 name=''
 age=0
@@ -11,6 +12,7 @@ mult = 1
 sum = 0
 name4=''
 age5=0
+gameb = ['Камень','Ножницы','Бумага']
 bot = telebot.TeleBot('5251849132:AAGbDfq2jbNcphLKj1b7Zk0JEddPu9inKEI')  # Создаем экземпляр бота @Ivanov_Ivan_1MD19_bot
 
 # -----------------------------------------------------------------------
@@ -62,6 +64,9 @@ def bot_message(message):
         elif message.text =='9 Задание':
             bot.send_message(message.chat.id, '2+2*2?')
             bot.register_next_step_handler(message, reg_ans)
+        elif message.text =='10 Задание':
+            bot.send_message(message.chat.id, 'Камень, ножницы или бумага?')
+            bot.register_next_step_handler(message, reg_game)
 
 
 def reg_name(message):
@@ -176,6 +181,33 @@ def reg_ans(message):
     else:
         bot.send_message(message.from_user.id, "Try more:(")
     age=0
+def reg_game(message):
+    global game
+    global gameb
+    global value
+    value = choice(gameb)
+    game = message.text
+    if game == 'Камень':
+        if value == 'Камень':
+            bot.send_message(message.chat.id, 'Ничья)))')
+        if value == 'Ножницы':
+            bot.send_message(message.chat.id, 'Вы победили, я поставил ножницы')
+        if value == 'Бумага':
+            bot.send_message(message.chat.id, 'Вы проиграли , я поставил бумагу')
+    if game == 'Ножницы':
+        if value=='Камень':
+            bot.send_message(message.chat.id, 'Вы проиграли , я поставил камень')
+        if value == 'Ножницы':
+            bot.send_message(message.chat.id, 'Ничья))')
+        if value == 'Бумага':
+            bot.send_message(message.chat.id, 'Вы выиграли , я поставил бумагу')
+    if game == 'Бумага':
+        if value == 'Камень':
+            bot.send_message(message.chat.id, 'Вы выиграли , я поставил камень')
+        if value == 'Ножницы':
+            bot.send_message(message.chat.id, 'Вы проиграли , я поставил ножницы')
+        if value == 'Бумага':
+            bot.send_message(message.chat.id, 'Ничья)))')
 
 
 
