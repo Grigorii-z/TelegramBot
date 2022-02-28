@@ -67,8 +67,39 @@ def bot_message(message):
         elif message.text =='10 Задание':
             bot.send_message(message.chat.id, 'Камень, ножницы или бумага?')
             bot.register_next_step_handler(message, reg_game)
+        #elif message.text == 'О Авторе':
+            #bot.send_message(message.chat.id, 'Хотите узнать больше о проектах автора и его соц. сетях?',
+                #eply_markup = markup_inline)
 
 
+
+@bot.message_handler(commands = ['get_info','info'])
+def get_user_info(message):
+    markup_inline = types.InlineKeyboardMarkup()
+    item_yes = types.InlineKeyboardButton(text = 'ДА' , callback_data = 'yes')
+    item_no = types.InlineKeyboardButton(text='НЕТ', callback_data='no')
+    bot.send_message(message.chat.id, 'Хотите узнать больше о проектах автора и его соц. сетях?',
+                     reply_markup=markup_inline)
+    markup_inline.add(item_yes,item_no)
+
+@bot.callback_query_handler(func = lambda call: True)
+def answer(call):
+    if call.data == 'yes':
+        markup_reply = types.ReplyKeyboardMarkup(resize_keyboard = True)
+        item_id = types.KeyboardButton('ЮТУБ')
+        item_username = types.KeyboardButton('ТикТок')
+
+        markup_reply.add(item_id,item_username)
+        bot.send_message(call.message.chat.id, 'Нажмите на одну из кнопок',
+            reply_markup = markup_reply)
+    elif call.data == 'no':
+        pass
+@bot.message_handler(content_types = ['text'])
+def get_text(message):
+    if bot_message.text == 'ЮТУБ':
+        bot.send_message(message.chat.id,'Окей летсгоу')
+    elif bot_message.text == 'ТикТок':
+        bot.send_message(message.chat.id, 'Окей летсгоу ТИк')
 def reg_name(message):
     global name
     name = message.text
