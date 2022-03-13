@@ -1,8 +1,14 @@
 # Вариант 1 - самый простой чат бот, просто отзывается
-
+import bs4
 import telebot  # pyTelegramBotAPI	4.3.1
+import requests
+from bs4 import BeautifulSoup
+from selenium import webdriver
 from telebot import types
 from random import *
+driver = webdriver.Chrome()
+
+
 
 name=''
 age=0
@@ -17,39 +23,9 @@ bot = telebot.TeleBot('5251849132:AAGbDfq2jbNcphLKj1b7Zk0JEddPu9inKEI')  # Со�
 
 # -----------------------------------------------------------------------
 # Функция, обрабатывающая команду /start
-@bot.message_handler(commands = ['get_info','info'])
-def info(message):
-    markup_inline = types.InlineKeyboardMarkup()
-    item_yes = types.InlineKeyboardButton(text = 'ДА' , callback_data = 'yes')
-    item_no = types.InlineKeyboardButton(text = 'НЕТ', callback_data='no')
-    markup_inline.add(item_yes, item_no)
-    bot.send_message(message.chat.id, 'Хотите узнать больше о проектах автора и его соц. сетях?',
-                     reply_markup = markup_inline
-                     )
 
-
-@bot.callback_query_handler(func = lambda call: True)
-def answer(call):
-    if call.data == 'yes':
-        markup_reply = types.ReplyKeyboardMarkup(resize_keyboard = True)
-        item_id = types.KeyboardButton('ЮТУБ')
-        item_username = types.KeyboardButton('ТикТок')
-
-        markup_reply.add(item_id, item_username)
-        bot.send_message(call.message.chat.id, 'Нажмите на одну из кнопок',
-            reply_markup = markup_reply)
-    elif call.data == 'no':
-        pass
-
-@bot.message_handler(content_types = ['text'])
-def get_text(message):
-    if message.text == 'ЮТУБ':
-        bot.send_message(message.chat.id,'Окей летсгоу')
-    elif message.text == 'ТикТок':
-        bot.send_message(message.chat.id, 'Окей летсгоу ТИк')
-
-@bot.message_handler(commands=["start"])
-def start(message):
+@bot.message_handler(commands=["zad"])
+def zad(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     item1 = types.KeyboardButton('1 Задание')
     item2 = types.KeyboardButton('2 Задание')
@@ -61,10 +37,27 @@ def start(message):
     item8 = types.KeyboardButton('8 Задание')
     item9 = types.KeyboardButton('9 Задание')
     item10 = types.KeyboardButton('10 Задание')
+    item11 = types.KeyboardButton('О Авторе')
+    item12 = types.KeyboardButton('Анекдот')
 
-    markup.add(item1,item2,item3,item4,item5,item6,item7,item8,item9,item10)
+    markup.add(item1,item2,item3,item4,item5,item6,item7,item8,item9,item10,item11,item12)
 
     bot.send_message(message.chat.id, 'Hello Student, {0.first_name}'.format(message.from_user), reply_markup = markup)
+
+
+@bot.message_handler(commands = ['get_info','info'])
+def info(message):
+    markup_inline = types.InlineKeyboardMarkup()
+    item_yes = types.InlineKeyboardButton(text = 'ДА' , callback_data = 'yes')
+    item_no = types.InlineKeyboardButton(text = 'НЕТ', callback_data='no')
+    markup_inline.add(item_yes, item_no)
+    bot.send_message(message.chat.id, 'Хотите узнать больше о проектах автора и его соц. сетях?',
+                     reply_markup = markup_inline
+                     )
+@bot.message_handler(commands=['search_channel'])
+def search_channel(message):
+    msg = bot.send_message(message.chat.id, "Введите YouTube канал")
+    bot.register_next_step_handler(msg, search_from_channel)
 
 @bot.message_handler(content_types=['text'])
 def bot_message(message):
@@ -98,12 +91,65 @@ def bot_message(message):
         elif message.text =='10 Задание':
             bot.send_message(message.chat.id, 'Камень, ножницы или бумага?')
             bot.register_next_step_handler(message, reg_game)
-        #elif message.text == 'О Авторе':
-            #bot.send_message(message.chat.id, 'Хотите узнать больше о проектах автора и его соц. сетях?',
-                #eply_markup = markup_inline)
+        elif message.text == 'О Авторе':
+            markup_inline = types.InlineKeyboardMarkup()
+            item_yes = types.InlineKeyboardButton(text='ДА', callback_data='yes')
+            item_no = types.InlineKeyboardButton(text='НЕТ', callback_data='no')
+            markup_inline.add(item_yes, item_no)
+            bot.send_message(message.chat.id, 'Хотите узнать больше о проектах автора и его соц. сетях?',
+                             reply_markup=markup_inline
+                             )
+        elif message.text == 'ЮТУБ':
+            bot.send_message(message.chat.id, 'Окей летсгоу')
+
+        elif message.text == 'ТикТок':
+            bot.send_message(message.chat.id, 'Окей летсгоу ТИк')
+        elif message.text == 'Анекдот':
+
+            bot.send_message(message.chat.id, get_anekdot)
 
 
 
+
+@bot.callback_query_handler(func = lambda call: True)
+def answer(call):
+    if call.data == 'yes':
+        markup_reply = types.ReplyKeyboardMarkup(resize_keyboard = True)
+        item_id = types.KeyboardButton('ЮТУБ')
+        item_username = types.KeyboardButton('ТикТок')
+
+        markup_reply.add(item_id, item_username)
+        bot.send_message(call.message.chat.id, 'Нажмите на одну из кнопок',
+            reply_markup = markup_reply)
+    elif call.data == 'no':
+        pass
+
+
+
+def get_text(message):
+    if message.text == 'ЮТУБ':
+        bot.send_message(message.chat.id,'Окей летсгоу')
+    elif message.text == 'ТикТок':
+        bot.send_message(message.chat.id, 'Окей летсгоу ТИк')
+
+def search_from_channel(message):
+    bot.send_message(message.chat.id, "Начинаю поиск")
+    driver.get(message.text + "/videos")
+    videos = driver.find_elements_by_id("video-title")
+    for i in range(len(videos)):
+        bot.send_message(message.chat.id, videos[i].get_attribute('href'))
+        if i == 10:
+            break
+
+def get_anekdot():
+    array_anekdots = []
+    req_anek = requests.get ('http://anekdotme.ru/random')
+    soup = bs4.BeautifulSoup(req_anek.text, "html.parser")
+    result_find = soup.select('.anekdot_text')
+    for result in result_find:
+        array_anekdots.append(result.getText().strip())
+    return array_anekdots[10]
+    #bot.send_message(message.from_user.id, result)
 
 def reg_name(message):
     global name
