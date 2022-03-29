@@ -3,12 +3,12 @@ import bs4
 import telebot  # pyTelegramBotAPI	4.3.1
 import requests
 from bs4 import BeautifulSoup
-from selenium import webdriver
+#from selenium import webdriver
 from telebot import types
 from random import *
 import dz
 #from menuBot import Menu
-driver = webdriver.Chrome()
+#driver = webdriver.Chrome()
 
 
 
@@ -72,14 +72,11 @@ def bot_message(message):
         elif message.text =='3 Задание':
             dz.dz3(bot, chat_id,message)
         elif message.text =='4 Задание':
-            bot.send_message(message.chat.id, 'Your age?')
-            bot.register_next_step_handler(message, reg_age2)
+            dz.dz4(bot, chat_id, message)
         elif message.text =='5 Задание':
-            bot.send_message(message.chat.id, 'Your Name?')
-            bot.register_next_step_handler(message, reg_name2)
+            dz.dz5(bot, chat_id, message)
         elif message.text =='6 Задание':
-            bot.send_message(message.chat.id, 'Your Name?')
-            bot.register_next_step_handler(message, reg_name3)
+            dz.dz6(bot, chat_id, message)
         elif message.text =='7 Задание':
             bot.send_message(message.chat.id, 'Your Name?')
             bot.register_next_step_handler(message, reg_name4)
@@ -152,18 +149,6 @@ def get_anekdot():
     return array_anekdots[10]
     #bot.send_message(message.from_user.id, result)
 
-#def reg_name(message):
-  #  global name
-  #  name = message.text
-  #  bot.send_message(message.chat.id, 'Your age?')
-  #  bot.register_next_step_handler(message, reg_age)
-
-def reg_name2(message):
-    global name2
-    name2 = message.text
-    name2=name2[7::-1]
-    bot.send_message(message.from_user.id, "Наоборот вот так"+' '+name2)
-
 def reg_name3(message):
     global name3
     global count
@@ -212,33 +197,6 @@ def reg_name5(message):
 
     bot.send_message(message.chat.id, 'Your age?')
     bot.register_next_step_handler(message, reg_age5)
-
-
-
-def reg_age(message):
-    global age
-    #age = message.text
-    while age ==0:
-        try:
-            age = int(message.text)
-        except Exception:
-            bot.send_message(message.from_user.id,"Вводите цифры!!!!")
-    bot.send_message(message.from_user.id, ' Hello ' + name + ' Little Big age ' + ' ' + str(age) + ' ')
-    age=0
-
-def reg_age2(message):
-    global age2
-    #age = message.text
-    while age2 ==0:
-        try:
-            age2 = int(message.text)
-        except Exception:
-            bot.send_message(message.from_user.id,"Вводите цифры!!!!")
-    if age2>18:
-        bot.send_message(message.from_user.id, ' Real Big Human ' + ' ' + str(age2) + ' ')
-    else:
-        bot.send_message(message.from_user.id, ' Small Baby Human ' + ' ' + str(age2) + ' ')
-    age2=0
 
 def reg_age5(message):
     global age5
