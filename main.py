@@ -6,6 +6,8 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from telebot import types
 from random import *
+import dz
+#from menuBot import Menu
 driver = webdriver.Chrome()
 
 
@@ -61,15 +63,14 @@ def search_channel(message):
 
 @bot.message_handler(content_types=['text'])
 def bot_message(message):
+    chat_id = message.chat.id
     if message.chat.type == 'private':
         if message.text == '1 Задание':
-            bot.send_message(message.chat.id,'Grigorii')
+            dz.dz1(bot, chat_id)
         elif message.text == '2 Задание':
-            #bot.send_message(message.chat.id, 'Grigorii2')
-            bot.send_message(message.chat.id, "Grigorii"*5)
+            dz.dz2(bot, chat_id)
         elif message.text =='3 Задание':
-            bot.send_message(message.chat.id, 'Your name?')
-            bot.register_next_step_handler(message, reg_name)
+            dz.dz3(bot, chat_id,message)
         elif message.text =='4 Задание':
             bot.send_message(message.chat.id, 'Your age?')
             bot.register_next_step_handler(message, reg_age2)
@@ -151,11 +152,11 @@ def get_anekdot():
     return array_anekdots[10]
     #bot.send_message(message.from_user.id, result)
 
-def reg_name(message):
-    global name
-    name = message.text
-    bot.send_message(message.chat.id, 'Your age?')
-    bot.register_next_step_handler(message, reg_age)
+#def reg_name(message):
+  #  global name
+  #  name = message.text
+  #  bot.send_message(message.chat.id, 'Your age?')
+  #  bot.register_next_step_handler(message, reg_age)
 
 def reg_name2(message):
     global name2
