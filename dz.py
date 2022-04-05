@@ -1,4 +1,5 @@
-
+from random import *
+gameb = ['Камень','Ножницы','Бумага']
 # -----------------------------------------------------------------------
 def dz1(bot, chat_id):
     bot.send_message(chat_id, 'Grigorii')
@@ -17,12 +18,27 @@ def dz4(bot, chat_id,message):
 def dz5(bot, chat_id,message):
     bot.send_message(chat_id, 'Your Name?')
     bot.register_next_step_handler(message, reg_name2,bot)
-
+# -----------------------------------------------------------------------
 def dz6(bot, chat_id, message):
     bot.send_message(chat_id, 'Your Name?')
     bot.register_next_step_handler(message, reg_name3,bot)
 # -----------------------------------------------------------------------
-
+def dz7 (bot,chat_id,message):
+    bot.send_message(chat_id, 'Your Name?')
+    bot.register_next_step_handler(message, reg_name4,bot)
+#__________________________________________________
+def dz8 (bot,chat_id,message):
+    bot.send_message(chat_id, 'Your Name?')
+    bot.register_next_step_handler(message, reg_name5,bot)
+#__________________________________________________
+def dz9 (bot,chat_id,message):
+    bot.send_message(chat_id, '2+2*2?')
+    bot.register_next_step_handler(message, reg_ans,bot)
+#__________________________________________________
+def dz10 (bot,chat_id,message):
+    bot.send_message(chat_id, 'Камень, ножницы или бумага?')
+    bot.register_next_step_handler(message, reg_game,bot)
+#__________________________________________________
 
 #__________________________________________________
 def reg_name(message,bot):
@@ -31,7 +47,7 @@ def reg_name(message,bot):
     name = message.text
     bot.send_message(message.chat.id, 'Your age?')
     bot.register_next_step_handler(message, reg_age,bot)
-
+#__________________________________________________
 def reg_age(message,bot):
     global age
     age = message.text
@@ -97,27 +113,84 @@ def reg_age3(message,bot,count):
     mult=str(mult)
     bot.send_message(message.chat.id, ' We count letters ' + str(count) + ' Add your age ' + ' ' + str(sum) + ' ' + ' Multiply your age '+str(mult))
 # -----------------------------------------------------------------------
-#def my_input(bot, chat_id, txt, ResponseHandler):
-  #  message = bot.send_message(chat_id, text=txt)
-  #  bot.register_next_step_handler(message, ResponseHandler)
 # -----------------------------------------------------------------------
-#def my_inputInt(bot, chat_id, txt, ResponseHandler):
+def reg_name4(message,bot):
+    global name4
+    name4 = message.text
+    if name4.islower() == True:
+        bot.send_message(message.chat.id, 'Есть нижний регитср')
+    elif name4.isupper()==True:
+        bot.send_message(message.chat.id, 'Есть верхний регитср')
+    else:
+        bot.send_message(message.chat.id, 'Есть верхний регитср и нижний')
+# -----------------------------------------------------------------------
+# -----------------------------------------------------------------------
+def reg_name5(message,bot):
+    global name5
+    name5 = message.text
+    for i in name5:
+        if i == " ":
+            bot.send_message(message.chat.id, 'Введите имя без пробелов')
 
- #   message = bot.send_message(chat_id, text=txt)
- #   bot.register_next_step_handler(message, my_inputInt_SecondPart, botQuestion=bot, txtQuestion=txt, ResponseHandler=ResponseHandler)
-   # # bot.register_next_step_handler(message, my_inputInt_return, bot, txt, ResponseHandler)  # то-же самое, но короче
+        elif i == "0" or i == "1" or i == "2" or i == "3" or i == "4" or i == "5" or i == "6" or i == "7" or i == "8" or i == "9":
+            bot.send_message(message.chat.id, 'Введите имя без цифр')
 
-#def my_inputInt_SecondPart(message, botQuestion, txtQuestion, ResponseHandler):
- #   chat_id = message.chat.id
- #   try:
- #       var_int = int(message.text)
- #       # данные корректно преобразовались в int, можно вызвать обработчик ответа, и передать туда наше число
- #       ResponseHandler(botQuestion, chat_id, var_int)
-  #  except ValueError:
- #       botQuestion.send_message(chat_id,
- #                        text="Можно вводить ТОЛЬКО целое число в десятичной системе исчисления (символами от 0 до 9)!\nПопробуйте еще раз...")
- #       my_inputInt(botQuestion, chat_id, txtQuestion, ResponseHandler)  # это не рекурсия, но очень похоже
- #       # у нас пара процедур, которые вызывают друг-друга, пока пользователь не введёт корректные данные,
- #       # и тогда этот цикл прервётся, и управление перейдёт "наружу", в ResponseHandler
+    bot.send_message(message.chat.id, 'Your age?')
+    bot.register_next_step_handler(message, reg_age5,bot)
 
+def reg_age5(message,bot):
+    global age5
+    age5 = int(message.text)
+    while age5 == 0:
+        try:
+            age5 = int(message.text)
+        except Exception:
+            bot.send_message(message.chat.id,"Вводите коректные цифры!!!!")
+    if age5<150 and age5>0:
+        bot.send_message(message.chat.id, ' Твоё имя без ошибок ' + name5 + ' Нормальный возраст ' + ' ' + str(age5) + ' ')
+# -----------------------------------------------------------------------
+# -----------------------------------------------------------------------
+def reg_ans(message,bot):
+    global age
+    age = int(message.text)
+    while age == 0:
+        try:
+            age = int(message.text)
+        except Exception:
+            bot.send_message(message.chat.id,"Вводите цифры!!!!")
+    if age == 6:
+        bot.send_message(message.chat.id,"Corecr Answer")
+    else:
+        bot.send_message(message.chat.id, "Try more:(")
+    age=0
+# -----------------------------------------------------------------------
+# -----------------------------------------------------------------------
+def reg_game(message,bot):
+    global game
+    global gameb
+    global value
+    value = choice(gameb)
+    game = message.text
+    if game == 'Камень'or game == 'камень':
+        if value == 'Камень' or value == 'камень':
+            bot.send_message(message.chat.id, 'Ничья)))')
+        if value == 'Ножницы'or value == 'ножницы':
+            bot.send_message(message.chat.id, 'Вы победили, я поставил ножницы')
+        if value == 'Бумага'or value == 'бумага':
+            bot.send_message(message.chat.id, 'Вы проиграли , я поставил бумагу')
+    if game == 'Ножницы'or game == 'ножницы':
+        if value=='Камень'or value == 'камень':
+            bot.send_message(message.chat.id, 'Вы проиграли , я поставил камень')
+        if value == 'Ножницы'or value == 'ножницы':
+            bot.send_message(message.chat.id, 'Ничья))')
+        if value == 'Бумага'or value == 'бумага':
+            bot.send_message(message.chat.id, 'Вы выиграли , я поставил бумагу')
+    if game == 'Бумага'or game == 'бумага':
+        if value == 'Камень'or value == 'камень':
+            bot.send_message(message.chat.id, 'Вы выиграли , я поставил камень')
+        if value == 'Ножницы'or value == 'ножницы':
+            bot.send_message(message.chat.id, 'Вы проиграли , я поставил ножницы')
+        if value == 'Бумага'or value == 'бумага':
+            bot.send_message(message.chat.id, 'Ничья)))')
+# -----------------------------------------------------------------------
 # -----------------------------------------------------------------------
