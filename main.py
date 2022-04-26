@@ -12,7 +12,7 @@ from menu import Menu ,Users
 #driver = webdriver.Chrome()
 import pygame
 import menu
-
+import pygame2
 
 name=''
 age=0
@@ -209,7 +209,8 @@ def goto_menu(chat_id, name_menu):
                         "2. Бумага побеждает камень\n" \
                         "3. Ножницы побеждают бумагу"
             bot.send_photo(chat_id, photo="https://i.ytimg.com/vi/Gvks8_WLiw0/maxresdefault.jpg", caption=text_game, parse_mode='HTML')
-
+        elif target_menu.name == "UNO":
+            pygame2.Card()
         return True
     else:
         return False
