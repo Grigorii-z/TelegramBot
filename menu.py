@@ -75,10 +75,10 @@ class Menu:
 
 m_main = Menu("Главное меню", buttons=["Развлечения", "Игры", "ДЗ", "Помощь"])
 
-m_games = Menu("Игры", buttons=["Камень, ножницы, бумага", "Игра в 21", "Угадай кто?", "Выход","UNO"], parent=m_main)
+m_games = Menu("Игры", buttons=["Камень, ножницы, бумага", "Игра в 21", "Угадай кто?", "Выход"], parent=m_main)
 m_game_21 = Menu("Игра в 21", buttons=["Карту!", "Стоп!", "Выход"], parent=m_games, handler="game_21")
 m_game_rsp = Menu("Камень, ножницы, бумага", buttons=["Камень", "Ножницы", "Бумага", "Выход"], parent=m_games, handler="game_rsp")
-m_game_uno = Menu("UNO", parent=m_games, handler="game_uno")
+
 m_DZ = Menu("ДЗ", buttons=["1 Задание", "2 Задание", "3 Задание", "4 Задание", "5 Задание", "6 Задание", "7 Задание","8 Задание","9 Задание","10 Задание", "Выход"], parent=m_main)
 
-m_fun = Menu("Развлечения", buttons=["Прислать собаку", "Анекдот", "Прислать фильм", "Выход"], parent=m_main)
+m_fun = Menu("Развлечения", buttons=["Прислать собаку", "Анекдот", "Прислать фильм", "Выход","ПОИСК ЮТУБ"], parent=m_main)

@@ -3,27 +3,16 @@ import telebot  # pyTelegramBotAPI	4.3.1
 import requests
 from io import BytesIO
 from bs4 import BeautifulSoup
-#from selenium import webdriver
 from telebot import types
 from random import *
 import dz
-from pygame2 import get_map_cell
 from menu import Menu ,Users
-#driver = webdriver.Chrome()
 import pygame
 import menu
-import pygame2
+import pars
 
-name=''
-age=0
-age2=0
-count=0
-mult = 1
-sum = 0
-name4=''
-age5=0
-gameb = ['Камень','Ножницы','Бумага']
-cols, rows = 8, 8
+
+
 bot = telebot.TeleBot('5251849132:AAGbDfq2jbNcphLKj1b7Zk0JEddPu9inKEI')  # Создаем экземпляр бота @Ivanov_Ivan_1MD19_bot
 
 # -----------------------------------------------------------------------
@@ -67,10 +56,7 @@ def info(message):
     bot.send_message(message.chat.id, 'Хотите узнать больше о проектах автора и его соц. сетях?',
                      reply_markup = markup_inline
                      )
-@bot.message_handler(commands=['search_channel'])
-def search_channel(message):
-    msg = bot.send_message(message.chat.id, "Введите YouTube канал")
-    bot.register_next_step_handler(msg, search_from_channel)
+
 
 @bot.message_handler(content_types=['text'])
 def bot_message(message):
@@ -104,6 +90,8 @@ def bot_message(message):
             dz.dz8(bot, chat_id, message)
         elif message.text =='9 Задание':
             dz.dz9(bot,chat_id,message)
+        elif message.text =='ПОИСК ЮТУБ':
+            pars.dzyt(bot,chat_id,message)
         elif message.text =='10 Задание':
             dz.dz10(bot, chat_id, message)
         elif message.text == 'О Авторе':
@@ -162,14 +150,7 @@ def get_text(message):
     elif message.text == 'ТикТок':
         bot.send_message(message.chat.id, 'Окей летсгоу ТИк')
 
-def search_from_channel(message):
-    bot.send_message(message.chat.id, "Начинаю поиск")
-    driver.get(message.text + "/videos")
-    videos = driver.find_elements_by_id("video-title")
-    for i in range(len(videos)):
-        bot.send_message(message.chat.id, videos[i].get_attribute('href'))
-        if i == 10:
-            break
+
 
 def get_anekdot():
     array_anekdots = []
@@ -209,8 +190,7 @@ def goto_menu(chat_id, name_menu):
                         "2. Бумага побеждает камень\n" \
                         "3. Ножницы побеждают бумагу"
             bot.send_photo(chat_id, photo="https://i.ytimg.com/vi/Gvks8_WLiw0/maxresdefault.jpg", caption=text_game, parse_mode='HTML')
-        elif target_menu.name == "UNO":
-            pygame2.Card()
+
         return True
     else:
         return False
