@@ -12,6 +12,7 @@ import menu
 import pars
 import pygame2
 from time import sleep as s
+import xl
 
 
 
@@ -99,6 +100,8 @@ def bot_message(message):
             dz.dz10(bot, chat_id, message)
         elif message.text =='XO':
             ma(message)
+        elif message.text =='Статистика XO':
+            xl.stat_give(bot,chat_id,message)
         elif message.text == 'О Авторе':
             markup_inline = types.InlineKeyboardMarkup()
             item_yes = types.InlineKeyboardButton(text='ДА', callback_data='yes')
@@ -233,7 +236,7 @@ def ma(message):
     make_bot_true()
     stop = False
     bot.send_message(message.from_user.id,
-                     'Это крестики-нолики!')
+                     'Это крестики-нолики!❌⭕')
     loading = bot.send_message(message.from_user.id, 'Ищу пользователей...')
     players.append(message.from_user)
     s(3)
@@ -265,7 +268,7 @@ def call_data(index1, index2, call):
     global board, players
     if hod % 2 == 0 and call.message.chat.id == user2.id:
         if board[index1][index2] == '◻':
-            board[index1][index2] = 'x'
+            board[index1][index2] = '❌'
             plus_hod()
             bot.edit_message_reply_markup(user2.id, message_id=us2_mes.id, reply_markup=make_board())
             bot.edit_message_reply_markup(user1.id, message_id=us1_mes.id, reply_markup=make_board())
@@ -275,15 +278,15 @@ def call_data(index1, index2, call):
                 else:
                     draw = False
                 bot.edit_message_reply_markup(user1.id, message_id=us1_mes.id,
-                                              reply_markup=make_board(end=True, draw=draw, symbol=check_win(board)))
+                                              reply_markup=make_board(end=True, draw=draw, symbol=check_win(board),check=1))
                 bot.edit_message_reply_markup(user2.id, message_id=us2_mes.id,
-                                              reply_markup=make_board(end=True, draw=draw, symbol=check_win(board)))
+                                              reply_markup=make_board(end=True, draw=draw, symbol=check_win(board),check=2))
                 players.clear()
         else:
             bot.answer_callback_query(callback_query_id=call.id, text='Эта клетка уже занята!')
     elif hod % 2 != 0 and call.message.chat.id == user1.id:
         if board[index1][index2] == '◻':
-            board[index1][index2] = 'o'
+            board[index1][index2] = '⭕'
             plus_hod()
             bot.edit_message_reply_markup(user2.id, message_id=us2_mes.id, reply_markup=make_board())
             bot.edit_message_reply_markup(user1.id, message_id=us1_mes.id, reply_markup=make_board())
@@ -293,9 +296,9 @@ def call_data(index1, index2, call):
                 else:
                     draw = False
                 bot.edit_message_reply_markup(user1.id, message_id=us1_mes.id,
-                                              reply_markup=make_board(end=True, draw=draw, symbol=check_win(board)))
+                                              reply_markup=make_board(end=True, draw=draw, symbol=check_win(board), check=1))
                 bot.edit_message_reply_markup(user2.id, message_id=us2_mes.id,
-                                              reply_markup=make_board(end=True, draw=draw, symbol=check_win(board)))
+                                              reply_markup=make_board(end=True, draw=draw, symbol=check_win(board), check=2))
                 players.clear()
         else:
             bot.answer_callback_query(callback_query_id=call.id, text='Эта клетка уже занята!')
@@ -331,16 +334,43 @@ def check_win(board):
     return False, False
 
 
-def make_board(end=False, draw=False, symbol='x'):
+def make_board(end=False, draw=False, symbol='x',check = 0):
     if end:
-        keyboard = types.InlineKeyboardMarkup(row_width=3)
+
         if draw:
             txt = 'Конец! Ничья!'
-        else:
-            txt = f'Конец! Победил игрок , который играл за "{symbol[1]}"'
-        b1 = types.InlineKeyboardButton(text=txt, callback_data=102)
-        keyboard.add(b1)
-        return keyboard
+            bot.send_message(user2.id,
+                             txt)
+            bot.send_message(user1.id,
+                             txt)
+            nik = user1.username
+            nik2 = user2.username
+            xl.stat_get_draw(nik)
+            xl.stat_get_draw2(nik2)
+            del_users()
+        elif check==2:
+            txt1 = f'Конец! Победил игрок , который играл за "{symbol[1]}" его ник - "{user1.username}"'
+            bot.send_message(user2.id,
+                             txt1)
+            bot.send_message(user1.id,
+                             txt1)
+            nik = user1.username
+            nik2 = user2.username
+            xl.stat_get_win(nik)
+            xl.stat_get_loose(nik2)
+            del_users()
+        elif check==1:
+            txt2 = f'Конец! Победил игрок , который играл за "{symbol[1]}" его ник - "{user2.username}"'
+            bot.send_message(user2.id,
+                             txt2)
+            bot.send_message(user1.id,
+                             txt2)
+            nik = user2.username
+            nik2 = user1.username
+            xl.stat_get_win(nik)
+            xl.stat_get_loose(nik2)
+            del_users()
+
     keyboard = types.InlineKeyboardMarkup(row_width=3)
     b1 = types.InlineKeyboardButton(text=board[0][0], callback_data=1)
     b2 = types.InlineKeyboardButton(text=board[0][1], callback_data=2)
