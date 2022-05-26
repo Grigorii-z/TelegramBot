@@ -1,5 +1,4 @@
-import openpyxl
-import xlwt
+
 from openpyxl import load_workbook
 
 

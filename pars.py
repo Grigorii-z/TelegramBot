@@ -4,7 +4,7 @@ from selenium import webdriver
 
 def dzyt(bot, chat_id, message):
     driver = webdriver.Chrome()
-    bot.send_message(chat_id, "Введите YouTube канал")
+    bot.send_message(chat_id, "Введите ссылку на  YouTube канал")
     bot.register_next_step_handler(message, search_from_channel, bot=bot, driver=driver)
 
 def search_from_channel(message, bot, driver):

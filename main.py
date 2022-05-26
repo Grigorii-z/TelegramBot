@@ -1,16 +1,12 @@
 import bs4
 import telebot  # pyTelegramBotAPI	4.3.1
 import requests
-from io import BytesIO
-from bs4 import BeautifulSoup
 from telebot import types
-from random import *
 import dz
 from menu import Menu ,Users
 import pygame
 import menu
 import pars
-import pygame2
 from time import sleep as s
 import xl
 
@@ -99,9 +95,12 @@ def bot_message(message):
         elif message.text =='10 Задание':
             dz.dz10(bot, chat_id, message)
         elif message.text =='XO':
-            ma(message)
+            us = message.from_user
+            ma(message,us)
         elif message.text =='Статистика XO':
             xl.stat_give(bot,chat_id,message)
+        elif message.text == "ПОИСК ЮТУБ":
+            pars.dzyt(bot, chat_id, message)
         elif message.text == 'О Авторе':
             markup_inline = types.InlineKeyboardMarkup()
             item_yes = types.InlineKeyboardButton(text='ДА', callback_data='yes')
@@ -230,7 +229,8 @@ def getMediaCards(game21):
         medias.append(types.InputMediaPhoto(url))
     return medias
 # -----------------------------------------------------------------------
-def ma(message):
+def ma(message,us):
+
     global user1, user2, players, stop
     user1, user2 = None, None
     make_bot_true()
@@ -238,7 +238,7 @@ def ma(message):
     bot.send_message(message.from_user.id,
                      'Это крестики-нолики!❌⭕')
     loading = bot.send_message(message.from_user.id, 'Ищу пользователей...')
-    players.append(message.from_user)
+    players.append(us)
     s(3)
     while True:
         if len(players) <= 1:
@@ -260,8 +260,6 @@ def ma(message):
             break
 
 
-players = []
-bot_send = True
 
 
 def call_data(index1, index2, call):
@@ -417,6 +415,8 @@ def chat(message):
         us2_mes = bot.send_message(user2.id, f'Играйте! Ты - Крестик! Ты играешь против {user1.first_name}', reply_markup=keyboard)
     bot.register_next_step_handler(message,ma)
 
+players = []
+bot_send = True
 # -----------------------------------------------------------------------
 bot.polling(none_stop=True, interval=0) # Запускаем бота
 
