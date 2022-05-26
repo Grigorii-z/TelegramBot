@@ -229,7 +229,7 @@ def getMediaCards(game21):
         medias.append(types.InputMediaPhoto(url))
     return medias
 # -----------------------------------------------------------------------
-def ma(message,us):
+def ma(message):
 
     global user1, user2, players, stop
     user1, user2 = None, None
@@ -238,7 +238,7 @@ def ma(message,us):
     bot.send_message(message.from_user.id,
                      'Это крестики-нолики!❌⭕')
     loading = bot.send_message(message.from_user.id, 'Ищу пользователей...')
-    players.append(us)
+    players.append(message.from_user)
     s(3)
     while True:
         if len(players) <= 1:
